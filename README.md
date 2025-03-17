@@ -46,7 +46,7 @@
 **LTL** is a [Lisp-like](https://en.wikipedia.org/wiki/Lisp_(programming_language)) language written
 in [Nim](https://nim-lang.org/) for templating and text automation. Example usage could be a static
 [HTML](https://en.wikipedia.org/wiki/HTML) site, where you can utilize LTL to reuse a header across
-multiple pages.
+multiple pages, or automatically generate a navigation bar given a list of pages.
 
 ## Example
 Example file `examples/count-to-10.ltl`:
