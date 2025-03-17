@@ -89,6 +89,13 @@ proc parsePlain(par: var Parser): Val =
             break
         result.text &= par.ch
 
+    # TODO: Better number parser
+    # These should not be parsed as numbers:
+    # +.
+    # -.
+    # 88x31
+    # -88x31
+    # +88x31
     var num: BiggestFloat
     if result.text[0] != '.' and result.text.parseBiggestFloat(num) != 0:
         return numVal num.float64
