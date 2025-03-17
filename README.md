@@ -43,8 +43,8 @@
 
 ## Introduction
 **LTL** is a [Lisp-like](https://en.wikipedia.org/wiki/Lisp_(programming_language)) language written
-in [Nim](https://nim-lang.org/) for templating and text automation. Example usage is a static
-[HTML](https://en.wikipedia.org/wiki/HTML) site, where you can use LTL to reuse a header across
+in [Nim](https://nim-lang.org/) for templating and text automation. Example usage could be a static
+[HTML](https://en.wikipedia.org/wiki/HTML) site, where you can utilize LTL to reuse a header across
 multiple pages.
 
 ## Example
