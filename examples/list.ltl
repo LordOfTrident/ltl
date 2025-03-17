@@ -1,0 +1,11 @@
+$(no-output)
+
+$(our food-list (list
+	apple
+	orange
+	bread
+	pear
+	rice
+))
+
+$(each i food $food-list (echo `Food #$(int (+ $i 1)): $(food)`))

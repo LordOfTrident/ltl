@@ -1,0 +1,4 @@
+$(no-output 1)
+$(def a content link `<a href="$(link)" target="_blank">$(content)</a>`)
+
+$(no-output 0)Hello! Do you know this cool language called $(a LTL https://github.com/lordoftrident/ltl)?
