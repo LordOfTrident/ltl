@@ -35,8 +35,9 @@
 	<summary>Table of contents</summary>
 	<ul>
 		<li><a href="#introduction">Introduction</a></li>
-		<li><a href="#demo">Demo</a></li>
+		<li><a href="#example">Example</a></li>
 		<li><a href="#quickstart">Quickstart</a></li>
+		<li><a href="#documentation">Documentation</a></li>
 		<li><a href="#bugs">Bugs</a></li>
 	</ul>
 </details>
