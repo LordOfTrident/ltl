@@ -26,7 +26,7 @@
 		<a href="https://github.com/LordOfTrident/ltl/issues">Request Feature</a>
 	</p>
 	<br>
-	<img src="./res/thumbnail.png" width="80%">
+	<img src="./res/thumbnail.png" width="70%">
 	<br>
 	<br>
 </div>
@@ -49,13 +49,13 @@ multiple pages.
 
 ## Example
 Example file `examples/count-to-10.ltl`:
-```lisp
+```
 I'm gonna count from 1 to 10:
 $(join `\n` (for n 1 10 1 `Counting: $(int $n)`))
 Finished!
 ```
 Now, if we run the file, we get the following output:
-```sh
+```
 $ ltl -f examples/count-to-10.ltl
 I'm gonna count from 1 to 10:
 Counting: 1
