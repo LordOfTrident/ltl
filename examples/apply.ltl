@@ -1,0 +1,12 @@
+$(no-output)
+
+$(def title-to-html-id title (apply $title
+	(split ` `)
+	(join -)
+	(lower)
+	(cat #)
+))
+
+$(our title `Introduction to LTL`)
+$(echo `Title: $(title)`)
+$(echo `HTML ID: $(title-to-html-id $title)`)
