@@ -525,6 +525,17 @@ proc builtinFexists(env: var Env, args: seq[Val]): Val =
 proc builtinNoOutput(env: var Env, args: seq[Val]): Val =
     env.noOutput = if args.len == 0: true else: args[0].numify() != 0
 
+proc builtinApply(env: var Env, args: seq[Val]): Val =
+    result = env.eval(args.getArg(0))
+    if args.len < 2:
+        return
+
+    for arg in args[1 .. ^1]:
+        if arg.kind == ValList:
+            result = listVal(arg.list & @[result])
+
+    return env.eval(result)
+
 proc newEnv*(output: string): Env =
     proc textSym(text: string): Sym = Sym(kind: SymVal, val: Val(kind: ValText, text: text))
     proc fnSym(fn: Fn): Sym = Sym(kind: SymFn, fn: fn)
@@ -594,6 +605,7 @@ proc newEnv*(output: string): Env =
         "dexists":   fnSym builtinDexists,
         "fexists":   fnSym builtinFexists,
         "no-output": fnSym builtinNoOutput,
+        "apply":     fnSym builtinApply,
     }.toTable])
 
 proc expand*(env: var Env, input: string): string =
