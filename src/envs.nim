@@ -21,7 +21,7 @@ type
     Env* = object
         expanded*: string
         syms:      seq[Table[string, Sym]]
-        noOutput:  bool
+        noOutput, stripWs: bool
 
 iterator ritems*[T](xs: openarray[T]): T {.inline.} =
     var i = xs.len - 1
@@ -522,9 +522,6 @@ proc builtinFexists(env: var Env, args: seq[Val]): Val =
             return falseVal
     return trueVal
 
-proc builtinNoOutput(env: var Env, args: seq[Val]): Val =
-    env.noOutput = if args.len == 0: true else: args[0].numify() != 0
-
 proc builtinApply(env: var Env, args: seq[Val]): Val =
     result = env.eval(args.getArg(0))
     if args.len < 2:
@@ -535,6 +532,12 @@ proc builtinApply(env: var Env, args: seq[Val]): Val =
             result = listVal(arg.list & @[result])
 
     return env.eval(result)
+
+proc builtinNoOutput(env: var Env, args: seq[Val]): Val =
+    env.noOutput = if args.len == 0: true else: args[0].numify() != 0
+
+proc builtinStripWs(env: var Env, args: seq[Val]): Val =
+    env.stripWs = if args.len == 0: true else: args[0].numify() != 0
 
 proc newEnv*(output: string): Env =
     proc textSym(text: string): Sym = Sym(kind: SymVal, val: Val(kind: ValText, text: text))
@@ -604,15 +607,28 @@ proc newEnv*(output: string): Env =
         "ls":        fnSym builtinLs,
         "dexists":   fnSym builtinDexists,
         "fexists":   fnSym builtinFexists,
-        "no-output": fnSym builtinNoOutput,
         "apply":     fnSym builtinApply,
+        "no-output": fnSym builtinNoOutput,
+        "strip-ws":  fnSym builtinStripWs,
     }.toTable])
 
+proc stripWs(content: string): string =
+    for line in content.split('\n'):
+        let stripped = line.strip()
+        if stripped.len == 0:
+            continue
+
+        if result.len > 0:
+            result &= '\n'
+        result &= stripped
+
 proc expand*(env: var Env, input: string): string =
+    var expanded: string
     for val in input.parse():
         if env.noOutput:
             discard $env.eval(val)
         else:
-            result &= $env.eval(val)
+            expanded &= $env.eval(val)
 
+    result = if env.stripWs: expanded.stripWs() else: expanded
     env.expanded &= result
