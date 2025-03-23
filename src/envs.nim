@@ -1,6 +1,6 @@
 # TODO: Refactor + cltl (LTL interpreter in C)
 
-import std/[tables, times, strformat, os, math, sequtils, strutils]
+import std/[tables, times, strformat, os, math, sequtils, strutils, algorithm]
 
 import parser, vals
 
@@ -506,6 +506,7 @@ proc builtinLs(env: var Env, args: seq[Val]): Val =
         for file in walkDir($env.eval(arg), relative = true):
             files &= $file[1]
 
+    files.sort(cmp)
     result = listVal(newSeq[Val](files.len))
     for i, file in files:
         result.list[i] = textVal $file
