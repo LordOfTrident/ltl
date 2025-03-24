@@ -2,9 +2,17 @@ $(strip-ws)
 
 <div>
 	<p>Things to do:</p>
+
 	<ul>
 		<li>Install LTL</li>
 		<li>Try out the LTL examples</li>
 		<li>Never use a different templating language ever again!</li>
 	</ul>
+
+$(strip-ws 0)<pre>
+A
+  little
+         staircase
+                   sentence.
+$(strip-ws)</pre>
 </div>

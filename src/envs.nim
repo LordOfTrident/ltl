@@ -102,10 +102,7 @@ proc builtinMap(env: var Env, args: seq[Val]): Val =
     for i in 0 .. (args.len - 1) div 2:
         let
             key = $env.eval(args[i * 2])
-            val = env.eval(args[i * 2 + 1])
-        if i + 1 >= args.len:
-            result.map[key] = textVal()
-            break
+            val = env.eval(args.getArg(i * 2 + 1))
         result.map[key] = val
 
 proc builtinEcho(env: var Env, args: seq[Val]): Val =
@@ -189,7 +186,7 @@ proc builtinUnless(env: var Env, args: seq[Val]): Val =
 proc builtinCond(env: var Env, args: seq[Val]): Val =
     for i in 0 .. (args.len - 1) div 2:
         if env.eval(args[i * 2]).numify() != 0:
-            return env.eval(args[i * 2 + 1])
+            return env.eval(args.getArg(i * 2 + 1))
 
 proc builtinDef(env: var Env, args: seq[Val]): Val =
     var params: seq[string]
@@ -534,6 +531,20 @@ proc builtinApply(env: var Env, args: seq[Val]): Val =
 
     return env.eval(result)
 
+proc builtinReplace(env: var Env, args: seq[Val]): Val =
+    result = textVal $env.eval(args.getArg(0))
+    if args.len < 2:
+        return
+
+    var replacements: seq[(string, string)]
+    for i in 0 .. args.len div 2 - 1:
+        let
+            sub = $env.eval(args[i * 2 + 1])
+            by  = $env.eval(args.getArg((i + 1) * 2))
+        replacements &= (sub, by)
+
+    result.text = result.text.multiReplace(replacements)
+
 proc builtinNoOutput(env: var Env, args: seq[Val]): Val =
     env.noOutput = if args.len == 0: true else: args[0].numify() != 0
 
@@ -609,6 +620,7 @@ proc newEnv*(output: string): Env =
         "dexists":   fnSym builtinDexists,
         "fexists":   fnSym builtinFexists,
         "apply":     fnSym builtinApply,
+        "replace":   fnSym builtinReplace,
         "no-output": fnSym builtinNoOutput,
         "strip-ws":  fnSym builtinStripWs,
     }.toTable])
@@ -624,12 +636,17 @@ proc stripWs(content: string): string =
         result &= stripped
 
 proc expand*(env: var Env, input: string): string =
-    var expanded: string
+    var expanded: seq[string] = @[""] # Every other expanded string will be stripped
     for val in input.parse():
+        let s = $env.eval(val)
         if env.noOutput:
-            discard $env.eval(val)
-        else:
-            expanded &= $env.eval(val)
+            continue
+        elif not (env.stripWs xor expanded.len mod 2 != 0):
+            expanded &= @[""]
 
-    result = if env.stripWs: expanded.stripWs() else: expanded
+        expanded[^1] &= s
+
+    for i, part in expanded:
+        result &= (if i mod 2 == 0: part else: part.stripWs())
+
     env.expanded &= result
