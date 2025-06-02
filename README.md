@@ -1,6 +1,6 @@
 <a name="readme-top"></a>
 <div align="center">
-	<h1>Moved to <a href="https://git.gay/rei/ltl">https://git.gay/rei/ltl</a></h1>
+	<h1>Moved to <a href="https://codeberg.org/lordoftrident/ltl">https://codeberg.org/lordoftrident/ltl</a></h1>
 	<a href="./LICENSE">
 		<img alt="License" src="https://img.shields.io/badge/license-GPL v3-e8415e?style=for-the-badge">
 	</a>
